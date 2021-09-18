@@ -1,0 +1,4 @@
+/tmp
+.env
+# Project exclude paths
+/venv/
