@@ -8,10 +8,30 @@ class CommonHandler(RequestHandler, WriteJSONMixin):
 
 
 class Ping(CommonHandler):
+    """ Метод проверки доступности сервера
+
+    Входные параметры: Отсутствуют
+
+    Пример успешного ответа:
+    {
+        'message': 'Pong'
+    }
+
+    """
     def get(self):
         self.jwrite({'message': 'Pong'})
 
 
 class Version(CommonHandler):
+    """ Метод получает версию API
+
+    Входные параметры: Отсутствуют
+
+    Пример успешного ответа:
+    {
+        'message': 'Version: 1.00'
+    }
+
+    """
     def get(self):
         self.jwrite({'message': f'Version: {Constants.VERSION}'})
