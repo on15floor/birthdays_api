@@ -1,8 +1,11 @@
 import os
 
-# Директории
+# База данных
 DB_DIR = os.path.dirname(os.path.abspath(__name__))
 DB_NAME = 'db_api.db'
 
-# Константы
-VERSION = '1.00'
+
+class Constants:
+    VERSION = '1.00'
+    DEBUG = True
+    PORT = 8888
