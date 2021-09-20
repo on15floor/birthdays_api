@@ -1,6 +1,5 @@
 import os
 import sqlite3
-from typing import Dict, List
 from config import DB_DIR, DB_NAME
 
 
@@ -12,7 +11,7 @@ class SQLite3Instance:
         self.con = sqlite3.connect(os.path.join(self.db_dir, self.db_name))
         self.cur = self.con.cursor()
 
-    def select(self, table: str, columns: List[str], where: str = None) -> List[Dict]:
+    def select(self, table: str, columns: list[str], where: str = None) -> list[dict]:
         """ Метод выборки данных из БД
         :param table: таблица
         :param columns: какие колонки необходимо выбрать (необязательный параметр)
@@ -24,7 +23,7 @@ class SQLite3Instance:
         self.cur.execute(sql)
         return [dict(zip([desc[0] for desc in self.cur.description], row)) for row in self.cur.fetchall()]
 
-    def insert(self, table: str, column_values: Dict) -> None:
+    def insert(self, table: str, column_values: dict) -> None:
         """ Метод вставки данных в БД
         :param table: таблица
         :param column_values: словарь для вставки

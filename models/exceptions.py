@@ -13,8 +13,18 @@ class BaseAPIException(Exception):
         self.status_code = status_code
 
 
-DB_CONNECTION_FAILED = BaseAPIException(
-    error_type='db_connection_failed',
-    error_descr='Database connection failed',
-    error_descr_rus='Ошибка при подключении к базе данных',
+AUTH_FAILED_WRONG_PASS = BaseAPIException(
+    status_code=403,
+    status='error',
+    error_type='auth_failed_wrong_password',
+    error_descr='Auth Failed Wrong Password',
+    error_descr_rus='Ошибка авторизации, неверный пароль',
+)
+
+NOT_ENOUGH_DATA_TO_QUERY = BaseAPIException(
+    status_code=400,
+    status='error',
+    error_type='not_enough_data_to_query',
+    error_descr='Not Enough Data To Query',
+    error_descr_rus='Не достаточно данных',
 )
