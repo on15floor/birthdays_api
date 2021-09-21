@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from models.exceptions import AUTH_FAILED_WRONG_PASS, NOT_ENOUGH_DATA_TO_QUERY
+from models.exceptions import AUTH_FAILED_WRONG_PASS, NOT_ENOUGH_DATA_TO_QUERY, AUTH_TOKEN_EXPIRED
 from utils.crypt import check_pw
 from utils.database import SQLite3Instance
 from datetime import datetime, timedelta
@@ -50,6 +50,25 @@ class User:
         if not check_pw(password, data['password']):
             raise AUTH_FAILED_WRONG_PASS
         self.update(**data)
+
+    @classmethod
+    def by_token(cls, token: str) -> 'User':
+        """ Метод возвращает модель пользователя по токену
+        :param token: токен авторизации
+        :return: User (model)
+        """
+        # Ищем токен в базе данных
+        db = SQLite3Instance()
+        where_condition = f'WHERE token="{token}"'
+        user_db = db.select('users_tokens', ['user_id', 'token_expired'], where=where_condition)
+        # Проверяем его на действительность
+        token_expired = user_db[0]['token_expired']
+        time_expired = datetime.strptime(token_expired[:19], '%Y-%m-%d %H:%M:%S')
+        if datetime.now() > time_expired:
+            raise AUTH_TOKEN_EXPIRED
+        # Возвращаем модель
+        user_id = user_db[0]['user_id']
+        return cls(user_id=user_id)
 
     def generate_auth_token(self):
         """ Метод генерирует новый токен авторизации для пользователя

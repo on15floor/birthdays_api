@@ -4,10 +4,8 @@ from config import DB_DIR, DB_NAME
 
 
 class Map(dict):
-    """
-    https://stackoverflow.com/questions/2352181/how-to-use-a-dot-to-access-members-of-dictionary
-    Example:
-    m = Map({'first_name': 'Eduardo'}, last_name='Pool', age=24, sports=['Soccer'])
+    """ https://stackoverflow.com/questions/2352181/how-to-use-a-dot-to-access-members-of-dictionary
+    Example: m = Map({'first_name': 'Eduardo'}, last_name='Pool', age=24, sports=['Soccer'])
     """
     def __init__(self, *args, **kwargs):
         super(Map, self).__init__(*args, **kwargs)
@@ -46,7 +44,7 @@ class SQLite3Instance:
         self.con = sqlite3.connect(os.path.join(self.db_dir, self.db_name))
         self.cur = self.con.cursor()
 
-    def select(self, table: str, columns: list[str], where: str = None) -> list[dict]:
+    def select(self, table: str, columns: list[str], where: str = '') -> list[dict]:
         """ Метод выборки данных из БД
         :param table: таблица
         :param columns: какие колонки необходимо выбрать (необязательный параметр)
