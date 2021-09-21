@@ -1,7 +1,14 @@
-from handlers import main
+from handlers import common, user
 
 APP_URLS = [
     # Служебные методы
-    ('/v1/ping', main.Ping),
-    ('/v1/version', main.Version),
+    # Метод проверки доступности сервера
+    ('/v1/ping', common.Ping),
+    # Метод получает версию API
+    ('/v1/version', common.Version),
+
+    # Методы пользователя
+    # Метод авторизации
+    ('/v1/user/auth', user.Auth),
+
 ]
