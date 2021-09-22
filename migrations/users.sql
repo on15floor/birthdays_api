@@ -1,5 +1,5 @@
 CREATE TABLE users(
-    [id] [INTEGER] PRIMARY KEY AUTOINCREMENT NOT NULL,
+    [user_id] [INTEGER] PRIMARY KEY AUTOINCREMENT NOT NULL,
     [created_date] DATE DEFAULT (DATETIME('now')),
     [first_name] [NVARCHAR](100) NOT NULL,
     [last_name] [NVARCHAR](100) NOT NULL,

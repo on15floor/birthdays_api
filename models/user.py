@@ -10,6 +10,8 @@ class User:
     def __init__(self, user_id: int = None):
         self.db = SQLite3Instance()
         self.user_id = user_id
+        self.last_name = None
+        self.first_name = None
         self.email = None
         self.password = None
         self.role_id = None
