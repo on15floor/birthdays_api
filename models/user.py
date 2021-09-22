@@ -35,7 +35,7 @@ class User:
         :return: dict = raw from users.sql
         """
         if user_id:
-            where_condition = f'WHERE id="{user_id}"'
+            where_condition = f'WHERE user_id="{user_id}"'
         elif email:
             where_condition = f'WHERE email="{email}"'
         else:
@@ -88,6 +88,13 @@ class User:
             }
             self.db.insert('users_tokens', sql)
         return token
+
+    def is_admin(self) -> bool:
+        """ Метод проверяет статус администратора у пользователя
+        :return: bool
+        """
+        if self.role_id == 1:
+            return True
 
     @staticmethod
     def registration(data: dict) -> bool:
