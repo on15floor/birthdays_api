@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from models.exceptions import AUTH_FAILED_WRONG_PASS, NOT_ENOUGH_DATA_TO_QUERY, AUTH_TOKEN_EXPIRED, \
-    USER_ALREADY_REGISTERED
+    USER_ALREADY_REGISTERED, ACCESS_DENIED, USER_NOT_FOUND
 from utils.crypt import check_pw, hash_pw
 from utils.database import SQLite3Instance
 from datetime import datetime, timedelta
@@ -89,13 +89,6 @@ class User:
             self.db.insert('users_tokens', sql)
         return token
 
-    def is_admin(self) -> bool:
-        """ Метод проверяет статус администратора у пользователя
-        :return: bool
-        """
-        if self.role_id == 1:
-            return True
-
     @staticmethod
     def registration(data: dict) -> bool:
         """ Метод регистрации нового пользователя
@@ -103,15 +96,47 @@ class User:
         :return: auth_token: str (uuid4)
         """
         # Проверяем есть данный пользователь в БД
-        db = SQLite3Instance()
-        email = data['email']
-        where_condition = f'WHERE email="{email}"'
-        user_db = db.select('users', ['user_id'], where=where_condition)
-        if user_db:
+        if not user_exist(data['email']):
             raise USER_ALREADY_REGISTERED
         # Формируем запись и вставляем в БД
         pwd = data.pop('password')
         data['password'] = hash_pw(pwd)
         data['role_id'] = 2
+        db = SQLite3Instance()
         db.insert('users', data)
+        return True
+
+    # Методы Администратора
+    def is_admin(self) -> bool:
+        """ Метод проверяет статус администратора у пользователя
+        :return: bool
+        """
+        if self.role_id == 1:
+            return True
+
+    def delete_user(self, email):
+        """ Метод удаляет пользователя
+        :param email: почта пользователя для удаления
+        :return: bool
+        """
+        # Проверяем права администратора
+        if not self.is_admin():
+            raise ACCESS_DENIED
+        # Проверяем есть данный пользователь в БД
+        if not user_exist(email):
+            raise USER_NOT_FOUND
+        # Удаляем пользователя
+        where_condition = f'WHERE email="{email}"'
+        self.db.delete('users', where_condition)
+
+
+def user_exist(email) -> bool:
+    """ Метод проверяет существование учетной записи в базе данных
+    :param email: почта пользователя
+    :return: bool
+    """
+    db = SQLite3Instance()
+    where_condition = f'WHERE email="{email}"'
+    user_db = db.select('users', ['user_id'], where=where_condition)
+    if user_db:
         return True

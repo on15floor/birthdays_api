@@ -1,4 +1,4 @@
-from handlers import common, user
+from handlers import common, user, admin
 
 APP_URLS = [
     # Служебные методы
@@ -12,4 +12,8 @@ APP_URLS = [
     ('/v1/user/auth', user.Auth),
     # Метод регистрации
     ('/v1/user/registration', user.Registration),
+
+    # Методы администратора
+    # Метод удаления пользователя
+    ('/v1/admin/delete_user', admin.DeleteUser),
 ]
