@@ -39,9 +39,12 @@ class Ping(CommonHandler):
     Входные параметры: Отсутствуют
 
     Пример успешного ответа:
-    {
-        'message': 'Pong'
-    }
+
+    .. sourcecode: json
+
+        {
+            "message": "Pong"
+        }
 
     """
     def get(self):
@@ -54,9 +57,12 @@ class Version(CommonHandler):
     Входные параметры: Отсутствуют
 
     Пример успешного ответа:
-    {
-        'message': 'Version: 1.00'
-    }
+
+    .. sourcecode: json
+
+        {
+            "message": "Version: 1.00"
+        }
 
     """
     def get(self):
