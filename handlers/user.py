@@ -49,3 +49,65 @@ class Auth(CommonHandler):
             'status': 'success',
             'auth-token': user.generate_auth_token()
         })
+
+
+class Registration(CommonHandler):
+    """ Метод регистрации
+
+    :reqheader Content-Type: 'application/x-www-form-urlencoded'
+
+    Входные параметры:
+
+    :fparam email: почта
+    :fparam password: пароль
+    :fparam first_name: имя
+    :fparam last_name: фамилия
+
+    Пример успешного ответа:
+
+    .. sourcecode: json
+
+        {
+            "status": "success"
+        }
+
+    - status - статус
+
+    Пример не успешного ответа:
+
+    .. sourcecode: json
+
+        {
+            "status": "success"
+            "status_code": 403,
+            "error_type": "user_already_registered",
+            "error_descr": "User already registered",
+            "error_descr_rus": "Пользователь уже зарегистрирован",
+        }
+
+    """
+
+    REGISTRATION_SCHEMA = {
+        'type': 'object',
+        'properties': {
+            'email': {'type': 'string', 'pattern': r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'},
+            'password': {'type': 'string', 'minLength': 5, 'maxLength': 100},
+            'last_name': {'type': 'string', 'minLength': 1, 'maxLength': 100},
+            'first_name': {'type': 'string', 'minLength': 1, 'maxLength': 100},
+        },
+        'required': [
+            'email',
+            'password',
+            'last_name',
+            'first_name'
+        ],
+        'additionalProperties': False
+    }
+
+    @in_data_required(REGISTRATION_SCHEMA)
+    def post(self):
+        user = User()
+        user.registration(self.in_data)
+        self.jwrite({
+            'status': 'success'
+        })

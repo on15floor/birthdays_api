@@ -10,5 +10,6 @@ APP_URLS = [
     # Методы пользователя
     # Метод авторизации
     ('/v1/user/auth', user.Auth),
-
+    # Метод регистрации
+    ('/v1/user/registration', user.Registration),
 ]

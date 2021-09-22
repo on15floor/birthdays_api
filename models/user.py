@@ -1,7 +1,8 @@
 from uuid import uuid4
 
-from models.exceptions import AUTH_FAILED_WRONG_PASS, NOT_ENOUGH_DATA_TO_QUERY, AUTH_TOKEN_EXPIRED
-from utils.crypt import check_pw
+from models.exceptions import AUTH_FAILED_WRONG_PASS, NOT_ENOUGH_DATA_TO_QUERY, AUTH_TOKEN_EXPIRED, \
+    USER_ALREADY_REGISTERED
+from utils.crypt import check_pw, hash_pw
 from utils.database import SQLite3Instance
 from datetime import datetime, timedelta
 
@@ -87,3 +88,23 @@ class User:
             }
             self.db.insert('users_tokens', sql)
         return token
+
+    @staticmethod
+    def registration(data: dict) -> bool:
+        """ Метод регистрации нового пользователя
+        :param data: словарь данных для регистрации
+        :return: auth_token: str (uuid4)
+        """
+        # Проверяем есть данный пользователь в БД
+        db = SQLite3Instance()
+        email = data['email']
+        where_condition = f'WHERE email="{email}"'
+        user_db = db.select('users', ['user_id'], where=where_condition)
+        if user_db:
+            raise USER_ALREADY_REGISTERED
+        # Формируем запись и вставляем в БД
+        pwd = data.pop('password')
+        data['password'] = hash_pw(pwd)
+        data['role_id'] = 2
+        db.insert('users', data)
+        return True
