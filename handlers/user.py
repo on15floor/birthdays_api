@@ -1,4 +1,4 @@
-from handlers.common import UserAuthHandler, CommonHandler
+from handlers.common import CommonHandler
 from utils.decorators import in_data_required
 from models.user import User
 
@@ -78,7 +78,7 @@ class Registration(CommonHandler):
     .. sourcecode: json
 
         {
-            "status": "success"
+            "status": "error"
             "status_code": 403,
             "error_type": "user_already_registered",
             "error_descr": "User already registered",

@@ -1,4 +1,4 @@
-from handlers import common, user, admin
+from handlers import common, user, admin, birthdays
 
 APP_URLS = [
     # Служебные методы
@@ -16,4 +16,12 @@ APP_URLS = [
     # Методы администратора
     # Метод удаления пользователя
     ('/v1/admin/delete_user', admin.DeleteUser),
+
+    # Методы работы с ДР
+    # Метод получения всех ДР
+    ('/v1/birthdays/get', birthdays.Get),
+    # Метод добавления ДР
+    ('/v1/birthdays/add', birthdays.Add),
+    # Метод удаления ДР
+    ('/v1/birthdays/del', birthdays.Del),
 ]

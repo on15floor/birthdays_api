@@ -61,3 +61,9 @@ USER_NOT_FOUND = BaseAPIException(
     error_descr='User not found',
     error_descr_rus='Пользователь не найден',
 )
+BIRTHDAY_NOT_FOUND = BaseAPIException(
+    status_code=404,
+    error_type='birthday_not_found',
+    error_descr='Birthday not found',
+    error_descr_rus='День рождения не найден',
+)
