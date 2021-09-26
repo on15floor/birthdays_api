@@ -96,7 +96,7 @@ class User:
         :return: auth_token: str (uuid4)
         """
         # Проверяем есть данный пользователь в БД
-        if not user_exist(data['email']):
+        if user_exist(data['email']):
             raise USER_ALREADY_REGISTERED
         # Формируем запись и вставляем в БД
         pwd = data.pop('password')

@@ -41,7 +41,7 @@ AUTH_TOKEN_EXPIRED = BaseAPIException(
     status_code=403,
     error_type='auth_token_expired',
     error_descr='Auth token expired',
-    error_descr_rus='Токе авторизации устарел',
+    error_descr_rus='Токен авторизации устарел',
 )
 USER_ALREADY_REGISTERED = BaseAPIException(
     status_code=400,
