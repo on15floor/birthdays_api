@@ -9,10 +9,11 @@ def del_exp_tokens():
     where_condition = f'WHERE token_expired < "{datetime.now()}"'
     exp_tokens = db.select('users_tokens', [], where=where_condition)
     exp_tokens_ids = [d['id'] for d in exp_tokens]
-    for id in exp_tokens_ids:
-        where_condition = f'WHERE id={id}'
-        db.delete('users_tokens', where_condition)
-        print(f'[i]> raw with id={id} deleted')
+    if exp_tokens_ids:
+        for i in exp_tokens_ids:
+            where_condition = f'WHERE id={i}'
+            db.delete('users_tokens', where_condition)
+            print(f'[i]> raw with id={i} deleted')
     else:
         print(f'[i]> nothing to deleted')
 
