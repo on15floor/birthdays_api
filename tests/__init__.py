@@ -20,6 +20,12 @@ registry_new_user = {
     'first_name': 'Тест',
     'last_name': 'Тестов',
 }
+add_new_birthday = {
+    'name': 'Тест Test',
+    'gender': 'F',
+    'birthday': '2000-10-20',
+    'comment': 'test_comment',
+}
 
 
 class BasicTestsClass(AsyncHTTPTestCase):

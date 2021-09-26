@@ -19,7 +19,7 @@ class Auth(CommonHandler):
 
         {
             "status": "success",
-            "auth-toke": "6fd56840-fe22-49a7-a49b-a62050018adb"
+            "auth-token": "6fd56840-fe22-49a7-a49b-a62050018adb"
         }
 
     - status - статус

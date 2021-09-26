@@ -21,7 +21,6 @@ class Birthdays:
         :return: None
         """
         in_data['user_id'] = self.user_id
-        print(in_data)
         self.db.insert('birthdays', in_data)
 
     def del_birthday(self, birthday_id):
