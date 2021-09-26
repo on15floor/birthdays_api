@@ -2,17 +2,30 @@ from tornado.web import RequestHandler
 from utils.mixins import WriteJSONMixin
 from config import Constants
 from utils.database import Map
-from models.exceptions import AUTH_TOKEN_EMPTY, AUTH_TOKEN_INVALID
+from models.exceptions import AUTH_TOKEN_EMPTY, AUTH_TOKEN_INVALID, BaseAPIException
 from models.user import User
 
 
 class CommonHandler(RequestHandler, WriteJSONMixin):
     """ Общий класс методов
     """
-    token = None
-
     def initialize(self) -> None:
         self.in_data = Map({})
+
+    def _handle_request_exception(self, e: BaseException) -> None:
+        if isinstance(e, BaseAPIException):
+            self.jwrite({
+                'status': e.status,
+                'type': e.error_type,
+                'status_code': e.status_code,
+                'message': e.error_descr,
+                'message_rus': e.error_descr_rus
+            })
+            self.set_status(e.status_code)
+            e.__traceback__ = None
+            self.finish()
+        else:
+            super()._handle_request_exception(e)
 
 
 class UserAuthHandler(CommonHandler):
