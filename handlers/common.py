@@ -1,9 +1,11 @@
+from tornado.ioloop import IOLoop
 from tornado.web import RequestHandler
 from utils.mixins import WriteJSONMixin
-from config import Constants
+from config import Constants, NEED_LOG
 from utils.database import Map
 from models.exceptions import AUTH_TOKEN_EMPTY, AUTH_TOKEN_INVALID, BaseAPIException
 from models.user import User
+from utils.logs import save_log
 
 
 class CommonHandler(RequestHandler, WriteJSONMixin):
@@ -26,6 +28,26 @@ class CommonHandler(RequestHandler, WriteJSONMixin):
             self.finish()
         else:
             super()._handle_request_exception(e)
+
+    def on_finish(self) -> None:
+        # т.к. торнадовские методы синхронные, нельзя напрямую сделать async
+        if self.request.uri in NEED_LOG:
+            IOLoop.current().add_callback(self.logs)
+
+    async def logs(self):
+        """ Логирование """
+        log = {
+            'ip': self.request.remote_ip,
+            'uri': self.request.uri,
+            'user-agent': self.request.headers.get('user-agent', '')
+        }
+        if hasattr(self, 'user'):
+            log.update({
+                'user_id': self.user.user_id,
+                'email': self.user.email
+            })
+
+        await save_log(log)
 
 
 class UserAuthHandler(CommonHandler):
