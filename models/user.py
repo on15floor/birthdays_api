@@ -129,6 +129,26 @@ class User:
         where_condition = f'WHERE email="{email}"'
         self.db.delete('users', where_condition)
 
+    def get_statistic(self) -> list:
+        """ Метод получения статистики по ДР
+        :return: List[Dict] статистика
+        """
+        # Проверяем права администратора
+        if not self.is_admin():
+            raise ACCESS_DENIED
+        sql_statement = '''
+                SELECT users.user_id, users.email, count(users.email) as birthdays_count,
+                --birthdays.id as birthdays_id,
+                users_roles.role_name
+                FROM users 
+                LEFT JOIN birthdays ON users.user_id = birthdays.user_id
+                LEFT JOIN users_roles ON users.role_id = users_roles.id
+                WHERE birthdays.id NOT NULL
+                GROUP BY users.email
+        '''
+        return self.db.pure_select(sql_statement=sql_statement)
+
+
 
 def user_exist(email) -> bool:
     """ Метод проверяет существование учетной записи в базе данных

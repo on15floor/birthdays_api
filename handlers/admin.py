@@ -66,3 +66,50 @@ class DeleteUser(UserAuthHandler):
         self.jwrite({
             'status': 'success'
         })
+
+
+class GetStatistic(UserAuthHandler):
+    """ Метод получения статистики по ДР
+
+    :reqheader Content-Type: 'application/x-www-form-urlencoded'
+    :reqheader auth-token: токен авторизации
+
+    Входные параметры отсутствуют.
+
+    Пример успешного ответа:
+
+    .. sourcecode: json
+
+        [
+            {
+                "user_id": 2,
+                "email": "a.petrov@lab15.ru",
+                "birthdays_count": 2,
+                "role_name": "user"
+            },
+            {
+                "user_id": 4,
+                "email": "m.sidorov@lab15.ru",
+                "birthdays_count": 2,
+                "role_name": "user"
+            }
+        ]
+
+    - status - статус
+
+    Пример ответа для пользователей без статуса администратор:
+
+    .. sourcecode: json
+
+        {
+            "status": "error",
+            "status_code": 403,
+            "error_type: "access_denied",
+            "error_descr: "Access denied",
+            "error_descr_rus: "Доступ запрещен",
+        }
+
+    """
+
+    def get(self):
+        self.jwrite(self.user.get_statistic())

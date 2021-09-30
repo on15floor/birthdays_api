@@ -16,6 +16,8 @@ APP_URLS = [
     # Методы администратора
     # Метод удаления пользователя
     ('/v1/admin/delete_user', admin.DeleteUser),
+    # Метод получения статистики по ДР
+    ('/v1/admin/get_statistic', admin.GetStatistic),
 
     # Методы работы с ДР
     # Метод получения всех ДР
