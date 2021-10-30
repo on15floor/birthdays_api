@@ -1,5 +1,8 @@
 import os
+
 from dotenv import load_dotenv
+
+from utils.objects import Map
 
 load_dotenv()
 
@@ -24,3 +27,9 @@ class Constants:
     VERSION = '1.00'
     DEBUG = os.getenv('DEBUG')
     PORT = 8888
+
+
+api = Map({
+    'unavailable_from_dt': '2021-10-28 05:00:00',
+    'unavailable_to_dt': '2021-10-29 06:00:00',
+})

@@ -1,11 +1,14 @@
 from tornado.ioloop import IOLoop
 from tornado.web import RequestHandler
-from utils.mixins import WriteJSONMixin
+
+import config
 from config import Constants, NEED_LOG
-from utils.database import Map
-from models.exceptions import AUTH_TOKEN_EMPTY, AUTH_TOKEN_INVALID, BaseAPIException
+from models.exceptions import AUTH_TOKEN_EMPTY, AUTH_TOKEN_INVALID, BaseAPIException, SERVER_IS_TEMPORARILY_UNAVAILABLE
 from models.user import User
+from utils.functions import is_api_available
 from utils.logs import save_log
+from utils.mixins import WriteJSONMixin
+from utils.objects import Map
 
 
 class CommonHandler(RequestHandler, WriteJSONMixin):
@@ -28,6 +31,12 @@ class CommonHandler(RequestHandler, WriteJSONMixin):
             self.finish()
         else:
             super()._handle_request_exception(e)
+
+    def prepare(self):
+        super().prepare()
+        # Проверка доступности сервера
+        if not is_api_available(config.api):
+            raise SERVER_IS_TEMPORARILY_UNAVAILABLE
 
     def on_finish(self) -> None:
         # т.к. торнадовские методы синхронные, нельзя напрямую сделать async

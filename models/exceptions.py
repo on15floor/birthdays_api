@@ -13,6 +13,12 @@ class BaseAPIException(Exception):
         self.status_code = status_code
 
 
+SERVER_IS_TEMPORARILY_UNAVAILABLE = BaseAPIException(
+    status_code=434,
+    error_type='server_is_temporarily_unavailable',
+    error_descr='Server is temporarily unavailable',
+    error_descr_rus='Сервер временно не доступен',
+)
 AUTH_FAILED_WRONG_PASS = BaseAPIException(
     status_code=403,
     error_type='auth_failed_wrong_password',

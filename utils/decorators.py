@@ -4,7 +4,7 @@ from logging import info, exception
 
 import jsonschema
 
-from utils.database import Map
+from utils.objects import Map
 
 RESERVED_PARAMETER_NAMES = {
     'token',
